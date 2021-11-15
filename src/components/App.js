@@ -6,13 +6,13 @@ function App() {
     <div className="App">
       <Navbar />
       <div className="main">
-        <div class="tabs">
-          <div class="tab">Movies</div>
-          <div class="tab">Favourites</div>
+        <div className="tabs">
+          <div className="tab">Movies</div>
+          <div className="tab">Favourites</div>
         </div>
         <div className="list">
-          {data.map((movie) => (
-            <MovieCard movie={movie} />
+          {data.map((movie, index) => (
+            <MovieCard movie={movie} key={`movies-${index}`} />
           ))}
         </div>
       </div>
