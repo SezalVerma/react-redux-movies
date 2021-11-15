@@ -2,11 +2,13 @@ import {
   ADD_MOVIES,
   ADD_TO_FAVOURITES,
   REMOVE_FROM_FAVOURITES,
+  SET_SHOW_FAVOURITES,
 } from "../actions";
 
 const initialMoviesState = {
   list: [],
   favourites: [],
+  showFavourites: false,
 };
 //if no state is provided to StorageEvent, it takes the store passed to reducer
 export default function movies(state = initialMoviesState, action) {
@@ -31,6 +33,12 @@ export default function movies(state = initialMoviesState, action) {
       return {
         ...state,
         favourites: filteredArray,
+      };
+    }
+    case SET_SHOW_FAVOURITES: {
+      return {
+        ...state,
+        showFavourites: action.val,
       };
     }
     default:
