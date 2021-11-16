@@ -2,9 +2,11 @@ import { combineReducers } from "redux";
 
 import {
   ADD_MOVIES,
+  ADD_MOVIE_TO_LIST,
   ADD_TO_FAVOURITES,
   REMOVE_FROM_FAVOURITES,
   SET_SHOW_FAVOURITES,
+  ADD_SEARCH_RESULT,
 } from "../actions";
 
 // **************************** Movies Reducer  ************************************************
@@ -22,6 +24,12 @@ export function movies(state = initialMoviesState, action) {
         ...state,
         list: action.movies,
       };
+    case ADD_MOVIE_TO_LIST: {
+      return {
+        ...state,
+        list: [action.movie, ...state.list],
+      };
+    }
     case ADD_TO_FAVOURITES: {
       // spread prev state & add new movie at first idx , then spread already existing movies in favourites
       return {
@@ -54,9 +62,25 @@ export function movies(state = initialMoviesState, action) {
 
 const initialSearchState = {
   result: {},
+  showSearchResults: false,
 };
 export function search(state = initialSearchState, action) {
-  return state;
+  switch (action.type) {
+    case ADD_SEARCH_RESULT:
+      return {
+        ...state,
+        result: action.movie,
+        showSearchResults: true,
+      };
+    case ADD_MOVIE_TO_LIST: {
+      return {
+        ...state,
+        showSearchResults: false,
+      };
+    }
+    default:
+      return state;
+  }
 }
 
 // **************************** Root Reducer **********************************

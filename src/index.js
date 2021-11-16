@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
 
 import "./index.css";
 import App from "./components/App";
@@ -20,12 +21,27 @@ const logger =
   ({ dispatch, getState }) =>
   (next) =>
   (action) => {
-    console.log("ACTION_TYPE = ", action.type);
+    if (typeof action !== "function") {
+      console.log("ACTION_TYPE = ", action.type);
+    }
     // pass the flow of code to - action
     next(action);
   };
 
-const store = createStore(rootReducer, applyMiddleware(logger));
+/* ********* Thunk used to call action creators that return a function rather than an object
+ const thunk =
+  ({ dispatch, getState }) =>
+  (next) =>
+  (action) => {
+    if (typeof action === "function") {
+      // call action func passing it dispatch
+      action(dispatch);
+      return;
+    }
+    next(action);
+  }; */
+
+const store = createStore(rootReducer, applyMiddleware(logger, thunk));
 
 ReactDOM.render(
   <React.StrictMode>
