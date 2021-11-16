@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
 import React from "react";
 import { addMovies, setShowFavourites } from "../actions";
+import { StoreContext } from "../index";
 
 class App extends React.Component {
   componentDidMount() {
@@ -35,7 +36,7 @@ class App extends React.Component {
     const displayList = showFavourites ? favourites : list;
     return (
       <div className="App">
-        <Navbar dispatch={this.props.store.dispatch} search={search} />
+        <Navbar search={search} />
         <div className="main">
           <div className="tabs">
             <div
@@ -74,4 +75,15 @@ class App extends React.Component {
   }
 }
 
-export default App;
+// we exposed the wrapper class , so store from consumer is passed to whole App component as all methods
+// of app need store but consumer can be called only in return method of class
+class AppWrapper extends React.Component {
+  render() {
+    return (
+      <StoreContext.Consumer>
+        {(store) => <App store={store} />}
+      </StoreContext.Consumer>
+    );
+  }
+}
+export default AppWrapper;

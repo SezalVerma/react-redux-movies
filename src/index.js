@@ -1,4 +1,4 @@
-import React from "react";
+import React, { createContext } from "react";
 import ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
@@ -43,9 +43,23 @@ const logger =
 
 const store = createStore(rootReducer, applyMiddleware(logger, thunk));
 
+export const StoreContext = createContext();
+
+class Provider extends React.Component {
+  render() {
+    const { store } = this.props;
+    return (
+      <StoreContext.Provider value={store}>
+        {this.props.children}
+      </StoreContext.Provider>
+    );
+  }
+}
+
 ReactDOM.render(
-  <React.StrictMode>
-    <App store={store} />
-  </React.StrictMode>,
+  // App component & all its descendants have access to store
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById("root")
 );
