@@ -2,6 +2,7 @@ import React, { createContext } from "react";
 import ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
+import { Provider } from "react-redux";
 
 import "./index.css";
 import App from "./components/App";
@@ -43,21 +44,21 @@ const logger =
 
 const store = createStore(rootReducer, applyMiddleware(logger, thunk));
 
-export const StoreContext = createContext();
+// export const StoreContext = createContext();
 
-class Provider extends React.Component {
-  render() {
-    const { store } = this.props;
-    return (
-      <StoreContext.Provider value={store}>
-        {this.props.children}
-      </StoreContext.Provider>
-    );
-  }
-}
+// class Provider extends React.Component {
+//   render() {
+//     const { store } = this.props;
+//     return (
+//       <StoreContext.Provider value={store}>
+//         {this.props.children}
+//       </StoreContext.Provider>
+//     );
+//   }
+// }
 
 // const coonectedComponent = connect(callback)(App);
-export function connect(callback) {
+/* export function connect(callback) {
   return function (Component) {
     class ConnectedComponent extends React.Component {
       constructor(props) {
@@ -92,7 +93,7 @@ export function connect(callback) {
     };
   };
 }
-
+ */
 ReactDOM.render(
   // App component & all its descendants have access to store
   <Provider store={store}>
