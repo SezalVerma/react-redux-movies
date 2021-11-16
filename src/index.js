@@ -56,6 +56,43 @@ class Provider extends React.Component {
   }
 }
 
+// const coonectedComponent = connect(callback)(App);
+export function connect(callback) {
+  return function (Component) {
+    class ConnectedComponent extends React.Component {
+      constructor(props) {
+        super(props);
+        // subscribe() returns function unsubscribe()
+        this.unsubscribe = this.props.store.subscribe(() => this.forceUpdate());
+      }
+      componentWillUnmount() {
+        // call unsubsribe() when component is removed from DOM
+        this.unsubscribe();
+      }
+      render() {
+        const { store } = this.props;
+        const state = store.getState();
+        const dataToBePassedAsProps = callback(state);
+        // spread properties in data
+        return (
+          <Component {...dataToBePassedAsProps} dispatch={store.dispatch} />
+        );
+      }
+    }
+
+    // wrapper to provide
+    return class ConnectedComponentWrapper extends React.Component {
+      render() {
+        return (
+          <StoreContext.Consumer>
+            {(store) => <ConnectedComponent store={store} />}
+          </StoreContext.Consumer>
+        );
+      }
+    };
+  };
+}
+
 ReactDOM.render(
   // App component & all its descendants have access to store
   <Provider store={store}>
